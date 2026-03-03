@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Marketing | Nahid Hossen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+</head>
+<body class="bg-slate-50">
+
+    <nav class="bg-[#0f172a] p-4 flex justify-between items-center text-white sticky top-0 z-50">
+        <h1 class="text-xl font-black">Digital <span class="text-blue-500">Marketing</span></h1>
+        <a href="https://wa.me/8801968405571" class="bg-green-600 px-4 py-2 rounded-full text-xs font-bold"><i class="fab fa-whatsapp"></i> 24/7 Active</a>
+    </nav>
+
+    <section class="max-w-7xl mx-auto px-6 py-12">
+   <a href="https://digital-marketing-expert-bangladesh-wheat.vercel.app/" target="_blank" style="display:block;">
+  <img src="https://uploads.onecompiler.io/44erpqqpq/44es5b5ay/7526.webp"  alt="aud" 
+       style="width:100%; height:auto;">
+</a>
+        <h2 class="text-3xl font-black mb-10 text-center">Social Media Service</h2>
+        <p>ডিজিটাল মার্কেটিং প্ল্যাটফর্মে আপনাকে স্বাগতম।  আমরা নিয়ে এসেছি অর্গানিক লাইফ টাইম গ্যারান্টি সহকারে বিভিন্ন ধরনের সার্ভিস।  </p>
+        <div id="services-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            </div>
+    </section>
+
+    <section id="pay" class="max-w-xl mx-auto px-6 py-20">
+        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl border border-blue-100">
+<a href="https://digital-marketing-expert-bangladesh-wheat.vercel.app/" target="_blank" style="display:block;">
+  <img src="https://uploads.onecompiler.io/44erpqqpq/44ew7fn27/7640.gif"  alt="aud" 
+       style="width:100%; height:auto;">
+            <h3 class="text-2xl font-black mb-6 text-center">Order Checkout From</h3>
+           <p>কোন সার্ভিস টি নিতে চাচ্ছে । ফর্ম পুরন করুন খুব দ্রুত একজন প্রতিনিধি আপনার সাথে যোগাযোগ করবে।</P>
+            <form id="userPaymentForm" class="space-y-4">
+                <input type="text" id="uName" placeholder="আপনার নাম" class="w-full p-4 rounded-xl bg-slate-50 outline-none border focus:border-blue-500" required>
+                <input type="text" id="uPhone" placeholder="আপনার ফোন নম্বর" class="w-full p-4 rounded-xl bg-slate-50 outline-none border focus:border-blue-500" required>
+                <input type="text" id="uTrx" placeholder="সার্ভিস নাম লিখুন.." class="w-full p-4 rounded-xl bg-slate-50 outline-none border focus:border-blue-500" required>
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg">Submit Request</button>
+           <img src="https://uploads.onecompiler.io/44erpqqpq/44f8wvahy/8037.png"  alt="aud" 
+          style="width:100%; height:auto;"> </a>
+            </form>
+            <p id="statusMsg" class="mt-4 text-center font-bold text-blue-600 hidden"></p>
+        </div>
+    </section>
+       <img src="https://uploads.onecompiler.io/44erpqqpq/44erpt4ff/7485.png"  alt="aud" 
+          style="width:100%; height:auto;"> </a>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC46mnAjWV65Ty4KxB903s1O3l92z16SRk",
+            authDomain: "callsmspanel.firebaseapp.com",
+            databaseURL: "https://callsmspanel-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "callsmspanel",
+            storageBucket: "callsmspanel.firebasestorage.app",
+            messagingSenderId: "110135980756",
+            appId: "1:110135980756:web:5b70189d71e2fa0c9d8141"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Load Services from Firebase
+        db.ref('services').on('value', (snapshot) => {
+            const container = document.getElementById('services-container');
+            container.innerHTML = "";
+            snapshot.forEach((child) => {
+                const s = child.val();
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <h4 class="text-xl font-black text-blue-600 mb-2">${s.name}</h4>
+                        <p class="text-slate-500 text-sm mb-4">${s.desc}</p>
+                        <p class="text-lg font-bold text-slate-800 mb-4">Price: ${s.price} TK</p>
+                        <a href="#pay" class="bg-slate-900 text-white px-6 py-2 rounded-lg text-xs font-bold inline-block">Order Now</a>
+                    </div>
+                `;
+            });
+        });
+
+        // Submit Payment
+        document.getElementById('userPaymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('uName').value,
+                phone: document.getElementById('uPhone').value,
+                trxid: document.getElementById('uTrx').value,
+                status: "Pending", // Default status
+                time: new Date().toLocaleString()
+            };
+            db.ref('orders').push(payload).then(() => {
+                document.getElementById('statusMsg').innerText = "ধন্যবাদ 🤗 আপনার রিকোয়েস্ট পাঠানো হয়েছে। 🫠 একজন প্রতিনিধি টিম  খুব শীঘ্রই আপনার সাথে যোগাযোগ করবে ।";
+                document.getElementById('statusMsg').classList.remove('hidden');
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>
